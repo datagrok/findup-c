@@ -1,32 +1,69 @@
 # findup
 
-*findup* locates a given filename in the nearest ancestor directory.
+**findup** ("find up") locates a given filename in the nearest ancestor directory.
 
-It looks in each successive parent directory for a filename given as an argument until found, and prints the full path to standard out.
+It looks in each successive parent directory until it finds the filename given as an argument, and prints its full path to standard out.
 
 ## Examples
 
+Imagine we keep multiple projects in some directory, `My Projects`. Here we have a `Python Project` (initialized by virtualenv) and a `C Project`:
+
+```
+/path/to/My Projects/
+├── C Project/
+│   ├── .git/
+│   ├── Makefile
+│   ├── lib/
+│   └── usr/
+│       └── lib/
+│           └── libfoo/
+└── Python Project/
+    ├── bin/
+    │   ├── activate
+    │   └── python2
+    ├── include/
+    ├── lib/
+    └── Web Assets/
+```
+
 ### Recompile code from anywhere within the project directory
 
-This runs make with a found Makefile:
+Imagine we're on the command line deep within our project's hierarchy, hacking on source code. After each edit, we want to run `make` to recompile. But Make has to be told where its `Makefile` is located.
 ```
-make -f $(findup Makefile)
+$ pwd
+/path/to/My Projects/C Project/usr/lib/libfoo
+$ findup Makefile
+/path/to/My Projects/C Project/Makefile
 ```
-But many makefiles are written with the assumption that the current directory is the one containing the Makefile. So it may be better to run:
+So we can use this command to compile our project from any directory within:
 ```
-make -C "$(dirname "$(findup Makefile)")"
+$ make -f "$(findup Makefile)"
+```
+Note: many makefiles are written with the assumption that the current directory is the one containing the makefile. So it may be better to run:
+```
+$ make -C "$(dirname "$(findup Makefile)")"
 ```
 
 ### Activate a virtualenv from anywhere within it
 
+Imagine we're on the command line deep within our Python project's hierarchy, hacking on source code. Then we remember we forgot to `activate` the virtualenv.
+
 ```
-source "$(findup bin/activate)"
+$ pwd
+/path/to/My Projects/Python Project/Web Assets
+$ findup bin/activate
+/path/to/My Projects/Python Project/bin/activate
 ```
+So we can use this command to activate the current virtualenv from any directory within:
+```
+$ source "$(findup bin/activate)"
+```
+Note here that you may specify a filename containing multiple subdirectories from the ancestor.
 
 ### Locate the `.git` directory in this repository
 
 ```
-echo "The git directory is: $(findup .git)"
+$ echo "The git directory is: "$(findup .git)""
 ```
 Note: `git` has a more robust built-in mechanism to do this: `git rev-parse --git-dir`
 
@@ -34,40 +71,37 @@ Note: `git` has a more robust built-in mechanism to do this: `git rev-parse --gi
 ### Locate the root of this git repository
 
 ```
-echo "The root of this repository is: $(findup .git/..)"
+$ echo "The root of this repository is: $(findup .git/..)"
 ```
 Note: `git` has a more robust built-in mechanism to do this: `git rev-parse --show-toplevel`
 
-
 ### Use `incontext`
 
-My tool `incontext` uses `findup` to set environment settings, activate virtualenvs, and the like.
+My tool [incontext](https://github.com/datagrok/incontext) helps manage project-specific environment settings, automatically activating virtualenvs, and the like. It uses `findup` to do so.
 
 ## Dependencies
 
-A POSIX shell, like `bash` or `dash`.
-Coreutils `fmt`
+- a POSIX shell, like `bash` or `dash`.
+- coreutils `readlink`
 
 ## Implementation decisions
 
-Whichever implementation language we use, I want installs to require few dependencies that are not already installed on most systems. That limits us to C, Rust, Golang, shell script, and maybe Python.
+Whichever implementation language I use, I want installs to require few dependencies that are not already installed on most systems. That limits me to C, Rust, Golang, shell script, and maybe Python.
 
 This version is written in shell script, but I would prefer a safer, faster, compiled language.
 
-I'd prefer one that doesn't create binaries that are 10s of megabytes large. (Golang?)
+I'd prefer one that doesn't create binaries that are 10s of megabytes large. (Golang...)
 
-I'd also consider a Guile Scheme implementation because I hope in vain for Guile Scheme to replace POSIX shell as the de-facto always-available system programming language for unix machines.
+I'd also consider a Guile Scheme implementation because I hope in vain for Guile Scheme to replace POSIX shell as the de-facto always-available system programming language for Unix machines.
 
 ## Other tools like findup:
 
-Wow, there are quite a few. I found these from a few minutes of searching GitHub.
+`findup` is a trivially simple tool that seems to have no standard implementation. So there are a proliferation of independent implementations. I found these from a few minutes of searching "find up" on GitHub:
 
 - [jlindsey/findup](https://github.com/jlindsey/findup) C; MIT. This is the best alternative implementation I have found. If this were packaged for my Linux distribution, I would throw away my own implementation of `findup` and prefer to install it instead.
-
 - [h2non/findup.rs](https://github.com/h2non/findup.rs) rust; MIT; library.
 - [h2non/findup](https://github.com/h2non/findup) golang; MIT; library.
 - [todddeluca/python-findup](https://github.com/todddeluca/python-findup) python; MIT; library.
-
 - [Filirom1/findup](https://github.com/Filirom1/findup) javascript.
 - [goblindegook/findup-node-modules](https://github.com/goblindegook/findup-node-modules) javascript; library, not general-purpose.
 - [jonschlinkert/find-file-up](https://github.com/jonschlinkert/find-file-up) javascript; library.
