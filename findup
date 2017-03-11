@@ -23,7 +23,7 @@ usage(){ cat <<- USAGE >&2
 	Example:
 
 	    Run 'make' from deep within your source heiarchy, like 'ant -find':
-	        make -f \`acquire Makefile\`
+	        make -f \`findup Makefile\`
 	USAGE
 }
 
@@ -44,7 +44,7 @@ fi
 
 while [ "$cwd" ]; do
 	if [ -e "$cwd/$target" ]; then
-		[ "$cwd" = "/" ] && echo "/$1" || echo "$cwd/$1"
+		[ "$cwd" = "/" ] && readlink -f "/$1" || readlink -f "$cwd/$1"
 		exit 0
 	fi
 	cwd="${cwd%/*}"
