@@ -21,6 +21,7 @@
 #define PROGRAM_NAME "findup"
 #define AUTHORS proper_name ("Michael F. Lamb")
 
+#include "config.h"
 
 #include <limits.h>
 #include <stdio.h>
