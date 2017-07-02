@@ -131,6 +131,19 @@ Labels used above:
 - javascript: I don't want to introduce a heavyweight dependency on npm or node.
 - golang: the lack of dependencies is a plus, but I kindof dislike the idea of having a 50MB executable for such a simple utility.
 
+## Compiling from source
+
+You'll need the GNU toolchain, including `autoreconf`.
+
+This program is built with the GNU Portability Library, [Gnulib](https://www.gnu.org/software/gnulib/). On Debian systems, you can get it easily with `apt-get install gnulib`. You could instead just clone gnulib somewhere with `git clone git://git.savannah.gnu.org/gnulib.git`; the only change to the script below will be that you will have to provide the full path to your clone's copy of `gnulib-tool`.
+
+    git clone git@github.com:datagrok/findup.git
+    cd findup
+    gnulib-tool --add-import
+    autoreconf -i
+    # Now, the standard compile + install step
+    ./configure && make && make install
+
 ## License: AGPL-3.0+
 
 All of the code herein is copyright 2017 [Michael F. Lamb](http://datagrok.org) and released under the terms of the [GNU Affero General Public License, version 3][AGPL-3.0+] (or, at your option, any later version.)
