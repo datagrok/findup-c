@@ -52,6 +52,7 @@ $ make -C "$(dirname "$(findup Makefile)")"
 To accomplish the original goal -- less typing -- we can make that into an alias. Set into `~/.bash_aliases`:
 ```
 alias rmake='make -C "$(dirname "$(findup Makefile)")"'
+```
 
 ### Activate a virtualenv from anywhere within it
 
