@@ -2,7 +2,13 @@
 
 **findup** ("find up") locates a given filename in the nearest ancestor directory.
 
-It looks in each successive parent directory until it finds the filename given as an argument, and prints its full path to standard out.
+```
+Usage: findup [-C DIRECTORY] FILENAME
+
+Look for FILENAME in the current or given DIRECTORY and all of its
+ancestors until found. Return the full path of the closest match on
+standard output.
+```
 
 ## Examples
 
@@ -43,6 +49,9 @@ Note: many makefiles are written with the assumption that the current directory 
 ```
 $ make -C "$(dirname "$(findup Makefile)")"
 ```
+To accomplish the original goal -- less typing -- we can make that into an alias. Set into `~/.bash_aliases`:
+```
+alias rmake='make -C "$(dirname "$(findup Makefile)")"'
 
 ### Activate a virtualenv from anywhere within it
 
@@ -86,19 +95,18 @@ My tool [incontext](https://github.com/datagrok/incontext) helps manage project-
 
 ## Implementation decisions
 
-Whichever implementation language I use, I want installs to require few dependencies that are not already installed on most systems. That limits me to C, Rust, Golang, shell script, and maybe Python.
+Whichever implementation language I use, I want binary installs to:
 
-This version is written in shell script, but I would prefer a safer, faster, compiled language.
-
-I'd prefer one that doesn't create binaries that are 10s of megabytes large. (Golang...)
-
-I'd also consider a Guile Scheme implementation because I hope in vain for Guile Scheme to replace POSIX shell as the de-facto always-available system programming language for Unix machines.
+- require few dependencies that are not already installed on most systems. That limits me to C, Rust, Golang, shell script, and maybe Python.
+- This version is written in shell script, but I would prefer a safer, faster, compiled language.
+- I'd prefer one that doesn't create binaries that are 10s of megabytes large. (Golang...)
+- I'd also consider a Guile Scheme implementation because I hope in vain for Guile Scheme to replace POSIX shell as the de-facto always-available system programming language for Unix machines.
 
 ## Other tools like findup:
 
 `findup` is a trivially simple tool that seems to have no standard implementation. So there are a proliferation of independent implementations. I found these from a few minutes of searching "find up" on GitHub:
 
-- [jlindsey/findup](https://github.com/jlindsey/findup) C; MIT. This is the best alternative implementation I have found. If this were packaged for my Linux distribution, I would throw away my own implementation of `findup` and prefer to install it instead.
+- [jlindsey/findup](https://github.com/jlindsey/findup) C; MIT. This almost looks like what I want but as far as I can tell, the implementation is missing.
 - [h2non/findup.rs](https://github.com/h2non/findup.rs) rust; MIT; library.
 - [h2non/findup](https://github.com/h2non/findup) golang; MIT; library.
 - [todddeluca/python-findup](https://github.com/todddeluca/python-findup) python; MIT; library.
