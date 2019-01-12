@@ -1,6 +1,6 @@
 # findup-c
 
-_An implementation of [findup](https://github.com/datagrok/findup) in C, based on GnuLib.
+_An implementation of [findup](https://github.com/datagrok/findup-sh) in C, based on GnuLib.
 My hope is to offer the finished program for inclusion into [GNU Core Utilities](https://www.gnu.org/software/coreutils/).
 This is currently incomplete;
 it mostly-works but I'm still learning how to use the GNU toolchain and GnuLib properly._
