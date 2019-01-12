@@ -72,7 +72,7 @@ void license(void) {
     printf("findup %s\n", version);
     fputs("Copyright (C) 2017  Michael F. Lamb\n\
 License: AGPLv3+ (GNU AGPL version 3 or later) <http://gnu.org/licenses/agpl.html>.\n\
-Web: https://github.com/datagrok/findup\n\
+Web: https://github.com/datagrok/findup-c\n\
 \n\
 This is free software, distributed under the terms of the GNU Affero General\n\
 Public License, version 3, or (at your option) any later version. You are\n\

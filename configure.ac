@@ -1,4 +1,4 @@
-AC_INIT([findup], [0.1], [mike@datagrok.org], [https://github.com/datagrok/findup])
+AC_INIT([findup], [0.1], [mike@datagrok.org], [https://github.com/datagrok/findup-c])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
 gl_EARLY
 AC_PROG_CC

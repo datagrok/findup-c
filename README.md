@@ -21,7 +21,7 @@ You'll need the GNU toolchain, including `autoreconf`.
 
 This program is built with the GNU Portability Library, [Gnulib](https://www.gnu.org/software/gnulib/). On Debian systems, you can get it with `apt-get install gnulib`. You could instead just clone gnulib somewhere with `git clone git://git.savannah.gnu.org/gnulib.git`; the only change to the script below will be that you will have to provide the full path to your clone's copy of `gnulib-tool`.
 
-    git clone git@github.com:datagrok/findup.git
+    git clone git@github.com:datagrok/findup-c.git
     cd findup
     gnulib-tool --add-import
     autoreconf -i
